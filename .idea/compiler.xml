@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="fastdfs-client-java" />
         <module name="gamll-manage-web" />
         <module name="gmail-web-util" />
         <module name="gmall-bean" />
@@ -20,6 +21,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="fastdfs-client-java" target="1.6" />
       <module name="gamll-manage-web" target="1.8" />
       <module name="gamll-parent" target="1.8" />
       <module name="gmail-web-util" target="1.8" />
