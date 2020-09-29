@@ -25,7 +25,7 @@ public class GamllManageWebApplicationTests {
 		String file = this.getClass().getResource("/tracker.conf").getFile();
 		ClientGlobal.init(file);
 		TrackerClient trackerClient=new TrackerClient();
-		TrackerServer trackerServer=trackerClient.getTrackerServer();
+		TrackerServer trackerServer=trackerClient.getConnection();
         StorageClient storageClient=new StorageClient(trackerServer,null);
 		String orginalFilename="e://1.jpg";
 		String[] upload_file = storageClient.upload_file(orginalFilename, "jpg", null);

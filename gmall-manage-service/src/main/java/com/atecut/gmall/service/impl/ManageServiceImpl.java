@@ -1,16 +1,23 @@
 package com.atecut.gmall.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.atecut.gmall.bean.*;
+import com.atecut.gmall.config.RedisUtil;
 import com.atecut.gmall.service.ManageService;
+import com.atecut.gmall.service.constant.ManageConst;
 import com.atecut.gmall.service.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
 @Service
 public class ManageServiceImpl implements ManageService {
+
+    @Autowired
+    RedisUtil redisUtil;
 
     @Autowired
     private BaseCatalog1Mapper baseCatalog1Mapper;
@@ -100,10 +107,10 @@ public class ManageServiceImpl implements ManageService {
         //重新插入属性值
         List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
         if (attrValueList != null && attrValueList.size() > 0)
-        for (BaseAttrValue baseAttrValue : attrValueList) {
-            baseAttrValue.setAttrId(baseAttrInfo.getId());
-            baseAttrValueMapper.insertSelective(baseAttrValue);
-        }
+            for (BaseAttrValue baseAttrValue : attrValueList) {
+                baseAttrValue.setAttrId(baseAttrInfo.getId());
+                baseAttrValueMapper.insertSelective(baseAttrValue);
+            }
     }
 
     @Override
@@ -206,7 +213,54 @@ public class ManageServiceImpl implements ManageService {
 
     @Override
     public SkuInfo getSkuInfo(String skuId) {
-        return skuInfoMapper.selectByPrimaryKey(skuId);
+        String skuKey = ManageConst.SKUKEY_PREFIX + skuId + ManageConst.SKUKEY_SUFFIX;
+        // 获取jedis
+        Jedis jedis = null;
+        SkuInfo skuInfo = null;
+        try {
+            jedis = redisUtil.getJedis();
+            String skuJson = jedis.get(skuKey);
+            // 没有数据
+            if(skuJson == null || skuJson.length() == 0) {
+                System.out.println("ManageServiceImpl==getSkuInfo==缓冲中没有数据===========");
+                // 加锁
+                String skuLockKey=ManageConst.SKUKEY_PREFIX+skuId+ManageConst.SKULOCK_SUFFIX;
+                String s = jedis.set(skuLockKey, "OK", "NX", "PX", ManageConst.SKULOCK_EXPIRE_PX);
+                if("OK".equals(s)) {
+                    // 第一个加锁的人
+                    System.out.println("加锁成功");
+                    // 从DB中拿数据
+                    skuInfo = getSkuInfoDB(skuId);
+                    String skuRedisStr = JSON.toJSONString(skuInfo);
+                    // 放入redis
+                    jedis.setex(skuKey,ManageConst.SKUKEY_TIMEOUT,skuRedisStr);
+                    jedis.del(skuLockKey);
+                    return skuInfo;
+                } else {
+                    // 加锁失败的人
+                    System.out.println("加锁失败，已经有人在操作DB，等待一秒");
+                    // 等待
+                    Thread.sleep(1000);
+                    // 自旋
+                    return getSkuInfo(skuId);
+                }
+            } else {
+                // 有数据
+                return JSON.parseObject(skuJson, SkuInfo.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getSkuInfoDB(skuId);
+        } finally {
+            if(jedis != null) jedis.close();
+        }
+    }
+
+    private SkuInfo getSkuInfoDB(String skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
+        List<SkuImage> skuImages = getSkuImageBySkuId(skuId);
+        skuInfo.setSkuImageList(skuImages);
+        return skuInfo;
     }
 
     @Override
@@ -223,6 +277,6 @@ public class ManageServiceImpl implements ManageService {
 
     @Override
     public List<SkuSaleAttrValue> getSkuSaleAttrValueListBySpu(String spuId) {
-       return skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
+        return skuSaleAttrValueMapper.selectSkuSaleAttrValueListBySpu(spuId);
     }
 }

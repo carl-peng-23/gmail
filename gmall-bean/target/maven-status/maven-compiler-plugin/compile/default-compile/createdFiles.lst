@@ -1,10 +1,17 @@
 com\atecut\gmall\bean\BaseAttrValue.class
 com\atecut\gmall\bean\BaseCatalog2.class
 com\atecut\gmall\bean\BaseSaleAttr.class
+com\atecut\gmall\bean\SkuImage.class
 com\atecut\gmall\bean\Test.class
 com\atecut\gmall\bean\BaseCatalog1.class
+com\atecut\gmall\bean\SkuInfo.class
+com\atecut\gmall\bean\SpuImage.class
 com\atecut\gmall\bean\BaseAttrInfo.class
+com\atecut\gmall\bean\SpuSaleAttr.class
 com\atecut\gmall\bean\UserAddress.class
 com\atecut\gmall\bean\UserInfo.class
 com\atecut\gmall\bean\BaseCatalog3.class
 com\atecut\gmall\bean\SpuInfo.class
+com\atecut\gmall\bean\SkuSaleAttrValue.class
+com\atecut\gmall\bean\SpuSaleAttrValue.class
+com\atecut\gmall\bean\SkuAttrValue.class

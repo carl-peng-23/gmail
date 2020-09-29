@@ -43,7 +43,7 @@ public class SpuManageController {
             String file1 = this.getClass().getResource("/tracker.conf").getFile();
             ClientGlobal.init(file1);
             TrackerClient trackerClient = new TrackerClient();
-            TrackerServer trackerServer = trackerClient.getTrackerServer();
+            TrackerServer trackerServer = trackerClient.getConnection();
             StorageClient storageClient = new StorageClient(trackerServer, null);
             String orginalFilename = file.getOriginalFilename();
             String extName = StringUtils.substringAfterLast(orginalFilename, ".");

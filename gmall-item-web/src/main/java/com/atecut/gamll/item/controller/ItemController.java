@@ -2,7 +2,6 @@ package com.atecut.gamll.item.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
-import com.atecut.gmall.bean.SkuImage;
 import com.atecut.gmall.bean.SkuInfo;
 import com.atecut.gmall.bean.SkuSaleAttrValue;
 import com.atecut.gmall.bean.SpuSaleAttr;
@@ -25,8 +24,8 @@ public class ItemController {
     @RequestMapping("{skuId}.html")
     public String skuInfoPage(@PathVariable("skuId") String skuId, Model model) {
         SkuInfo skuInfo = manageService.getSkuInfo(skuId);
-        List<SkuImage> skuImageList = manageService.getSkuImageBySkuId(skuId);
-        skuInfo.setSkuImageList(skuImageList);
+//        List<SkuImage> skuImageList = manageService.getSkuImageBySkuId(skuId);
+//        skuInfo.setSkuImageList(skuImageList);
         model.addAttribute("skuInfo", skuInfo);
 
         // 查询销售属性，销售属性值集合

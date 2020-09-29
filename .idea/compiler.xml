@@ -7,18 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gmall-common-util" />
         <module name="fastdfs-client-java" />
         <module name="gamll-manage-web" />
-        <module name="gmail-web-util" />
         <module name="gmall-bean" />
-        <module name="gmall-common-util" />
+        <module name="gmall-web-util" />
+        <module name="gmall-manage-service" />
+        <module name="gmail-web-util" />
+        <module name="gmall-user-manage" />
         <module name="gmall-interface" />
         <module name="gmall-item-web" />
-        <module name="gmall-manage-service" />
-        <module name="gmall-order-web" />
         <module name="gmall-service-util" />
-        <module name="gmall-user-manage" />
-        <module name="gmall-web-util" />
+        <module name="gmall-order-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
