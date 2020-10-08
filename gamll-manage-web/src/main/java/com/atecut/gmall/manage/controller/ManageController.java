@@ -2,13 +2,13 @@ package com.atecut.gmall.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.atecut.gmall.bean.*;
+import com.atecut.gmall.service.ListService;
 import com.atecut.gmall.service.ManageService;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @CrossOrigin
@@ -17,6 +17,9 @@ public class ManageController {
 
     @Reference
     ManageService manageService;
+
+    @Reference
+    ListService listService;
 
     @ResponseBody
     @RequestMapping("/getCatalog1")
@@ -61,5 +64,24 @@ public class ManageController {
         BaseAttrInfo baseAttrInfo = manageService.getAttrInfo(attrId);
         return baseAttrInfo.getAttrValueList();
     }
+
+    // 上架
+    @RequestMapping(value = "onSale",method = RequestMethod.GET)
+    @ResponseBody
+    public void onSale(String skuId){
+        SkuInfo skuInfo = manageService.getSkuInfo(skuId);
+        SkuLsInfo skuLsInfo = new SkuLsInfo();
+        // 属性拷贝
+        try {
+            BeanUtils.copyProperties(skuLsInfo,skuInfo);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        listService.saveSkuInfo(skuLsInfo);
+    }
+
+
 
 }

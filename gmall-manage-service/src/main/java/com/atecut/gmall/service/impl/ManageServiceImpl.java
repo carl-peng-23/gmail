@@ -260,6 +260,10 @@ public class ManageServiceImpl implements ManageService {
         SkuInfo skuInfo = skuInfoMapper.selectByPrimaryKey(skuId);
         List<SkuImage> skuImages = getSkuImageBySkuId(skuId);
         skuInfo.setSkuImageList(skuImages);
+        // 查询平台属性值集合
+        SkuAttrValue skuAttrValue = new SkuAttrValue();
+        skuAttrValue.setSkuId(skuId);
+        skuInfo.setSkuAttrValueList(skuAttrValueMapper.select(skuAttrValue));
         return skuInfo;
     }
 

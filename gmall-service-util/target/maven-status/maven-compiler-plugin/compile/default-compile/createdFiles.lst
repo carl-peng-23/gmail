@@ -1,2 +1,4 @@
+com\atecut\gmall\config\ActiveMQConfig.class
+com\atecut\gmall\config\ActiveMQUtil.class
 com\atecut\gmall\config\RedisConfig.class
 com\atecut\gmall\config\RedisUtil.class

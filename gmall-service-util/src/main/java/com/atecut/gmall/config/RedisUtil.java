@@ -5,6 +5,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisUtil {
+
     private JedisPool jedisPool;
 
     public  void  initJedisPool(String host,int port,int database){

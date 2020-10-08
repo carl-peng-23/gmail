@@ -1,2 +1,6 @@
+com\atecut\gmall\service\PaymentService.class
+com\atecut\gmall\service\OrderService.class
+com\atecut\gmall\service\CartService.class
 com\atecut\gmall\service\UserService.class
+com\atecut\gmall\service\ListService.class
 com\atecut\gmall\service\ManageService.class
